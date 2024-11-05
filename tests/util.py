@@ -47,6 +47,7 @@ def save_result_images(resp_json):
 def handle_response(resp_json, timer):
     if resp_json['output'] is not None and 'images' in resp_json['output']:
         save_result_images(resp_json)
+        uploaded_images = resp_json['output']['uploaded_images']
     else:
         print(json.dumps(resp_json, indent=4, default=str))
 

@@ -12,7 +12,7 @@ if __name__ == '__main__':
                 "steps": 20,
                 "cfg_scale": 8,
                 "sampler_name": "euler",
-                "ckpt_name": "deliberate_v2.safetensors",
+                "ckpt_name": "sd_xl_base_1.0.safetensors",
                 "batch_size": 1,
                 "width": 512,
                 "height": 512,

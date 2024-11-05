@@ -3,13 +3,18 @@ import requests
 import json
 import base64
 import runpod
+import os
+from runpod.serverless.utils import rp_upload
 from runpod.serverless.utils.rp_validator import validate
 from runpod.serverless.modules.rp_logger import RunPodLogger
 from requests.adapters import HTTPAdapter, Retry
 from schemas.input import INPUT_SCHEMA
+import base64
+from dotenv import dotenv_values
 
 
 BASE_URI = 'http://127.0.0.1:3000'
+# BASE_URI = 'http://127.0.0.1:8188'
 VOLUME_MOUNT_PATH = '/runpod-volume'
 TIMEOUT = 600
 
@@ -71,6 +76,7 @@ def get_txt2img_payload(workflow, payload):
 
 
 def get_workflow_payload(workflow_name, payload):
+    # with open(f'./workflows/{workflow_name}.json', 'r') as json_file:
     with open(f'/workflows/{workflow_name}.json', 'r') as json_file:
         workflow = json.load(json_file)
 
@@ -84,6 +90,40 @@ def get_filenames(output):
     for key, value in output.items():
         if 'images' in value and isinstance(value['images'], list):
             return value['images']
+        
+def base64_encode(img_path):
+    with open(img_path, "rb") as image_file:
+        encoded_string = base64.b64encode(image_file.read()).decode("utf-8")
+        return f"{encoded_string}"
+        
+def process_output_images(image_path, event_id):
+    env = dotenv_values('.env')
+    print(f"runpod-worker-comfy - {image_path}")
+
+    # The image is in the output folder
+    if os.path.exists(image_path):
+        if os.environ.get("BUCKET_ENDPOINT_URL", False):
+            # URL to image in AWS S3
+            image = rp_upload.upload_image(event_id, image_path)
+            print(
+                "runpod-worker-comfy - the image was generated and uploaded to AWS S3"
+            )
+        else:
+            # base64 image
+            image = base64_encode(image_path)
+            print(
+                "runpod-worker-comfy - the image was generated and converted to base64"
+            )
+
+        return {
+            "image": image,
+        }
+    else:
+        print("runpod-worker-comfy - the image does not exist in the output folder")
+        return {
+            "status": "error",
+            "message": f"the image does not exist in the specified output folder: {image_path}",
+        }
 
 
 # ---------------------------------------------------------------------------- #
@@ -124,6 +164,7 @@ def handler(event):
         )
 
         resp_json = queue_response.json()
+        print(f'resp_json: {resp_json}')
 
         if queue_response.status_code == 200:
             prompt_id = resp_json['prompt_id']
@@ -143,16 +184,20 @@ def handler(event):
                 logger.info(f'Images generated successfully for prompt: {prompt_id}')
                 image_filenames = get_filenames(resp_json[prompt_id]['outputs'])
                 images = []
+                uploaded_images = {}
 
                 for image_filename in image_filenames:
                     filename = image_filename['filename']
                     image_path = f'{VOLUME_MOUNT_PATH}/ComfyUI/output/{filename}'
+                    # image_path = f'/Users/lamngo/Documents/AI/ComfyUI/output/{filename}'
 
                     with open(image_path, 'rb') as image_file:
                         images.append(base64.b64encode(image_file.read()).decode('utf-8'))
+                    uploaded_images = process_output_images(image_path, event["id"])
 
                 return {
-                    'images': images
+                    # 'images': images,
+                    'result': uploaded_images
                 }
             else:
                 raise RuntimeError('No output found, please ensure that the model is correct and that it exists')
