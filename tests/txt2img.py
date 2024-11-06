@@ -16,7 +16,7 @@ if __name__ == '__main__':
                 "batch_size": 1,
                 "width": 512,
                 "height": 512,
-                "prompt": "masterpiece best quality man wearing a hat",
+                "prompt": "masterpiece best quality aristocrat cat wearing a hat",
                 "negative_prompt": "bad hands"
             }
         }

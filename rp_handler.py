@@ -13,8 +13,8 @@ import base64
 from dotenv import dotenv_values
 
 
-BASE_URI = 'http://127.0.0.1:3000'
-# BASE_URI = 'http://127.0.0.1:8188'
+# BASE_URI = 'http://127.0.0.1:3000' # docker
+BASE_URI = 'http://127.0.0.1:8188' # local
 VOLUME_MOUNT_PATH = '/runpod-volume'
 TIMEOUT = 600
 
@@ -76,8 +76,8 @@ def get_txt2img_payload(workflow, payload):
 
 
 def get_workflow_payload(workflow_name, payload):
-    # with open(f'./workflows/{workflow_name}.json', 'r') as json_file:
-    with open(f'/workflows/{workflow_name}.json', 'r') as json_file:
+    with open(f'./workflows/{workflow_name}.json', 'r') as json_file: # local
+    # with open(f'/workflows/{workflow_name}.json', 'r') as json_file: # docker
         workflow = json.load(json_file)
 
     if workflow_name == 'txt2img':
@@ -178,7 +178,7 @@ def handler(event):
                 if r.status_code == 200 and len(resp_json):
                     break
 
-                time.sleep(0.2)
+                time.sleep(0.5)
 
             if len(resp_json[prompt_id]['outputs']):
                 logger.info(f'Images generated successfully for prompt: {prompt_id}')
@@ -188,15 +188,15 @@ def handler(event):
 
                 for image_filename in image_filenames:
                     filename = image_filename['filename']
-                    image_path = f'{VOLUME_MOUNT_PATH}/ComfyUI/output/{filename}'
-                    # image_path = f'/Users/lamngo/Documents/AI/ComfyUI/output/{filename}'
+                    # image_path = f'{VOLUME_MOUNT_PATH}/ComfyUI/output/{filename}' # docker
+                    image_path = f'/Users/lamngo/Documents/AI/ComfyUI/output/{filename}' # local
 
                     with open(image_path, 'rb') as image_file:
                         images.append(base64.b64encode(image_file.read()).decode('utf-8'))
-                    uploaded_images = process_output_images(image_path, event["id"])
+                    # uploaded_images = process_output_images(image_path, event["id"])
 
                 return {
-                    # 'images': images,
+                    'images': images,
                     'result': uploaded_images
                 }
             else:
