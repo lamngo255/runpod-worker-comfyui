@@ -14,11 +14,13 @@ export PYTHONUNBUFFERED=true
 export HF_HOME="/workspace"
 cd /workspace/ComfyUI
 echo "Run ComfyUI server"
-python main.py --port 3000 > /workspace/logs/comfyui.log 2>&1 &
+# python main.py --port 3000 > /workspace/logs/comfyui.log 2>&1 &
+python main.py --port 3000
+echo "Starting Comfy...."
 deactivate
 
-echo "Starting RunPod Handler"
-python3 -u /rp_handler.py
+# echo "Starting RunPod Handler"
+# python3 -u /rp_handler.py
 
 # in local
 
