@@ -25,7 +25,7 @@ cp .env.example .env
 
 Edit the .env file and add your RunPod API key to
 `RUNPOD_API_KEY` and your endpoint ID to
-`RUNPOD_ENDPOINT_ID`.  Without these credentials,
+`RUNPOD_ENDPOINT_ID`. Without these credentials,
 the tests will attempt to run locally instead of
 on RunPod.
 
