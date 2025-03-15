@@ -17,7 +17,7 @@ manually below, and then you don't need to follow any of the
 manual instructions.
 
 ```bash
-wget https://raw.githubusercontent.com/ashleykleynhans/runpod-worker-comfyui/main/scripts/install.sh
+wget https://raw.githubusercontent.com/lamngo255/runpod-worker-comfyui/main/scripts/install.sh
 chmod +x install.sh
 ./install.sh
 ```
@@ -28,6 +28,7 @@ You only need to complete the steps below if you did not run the
 automatic installation script above.
 
 1. Install the ComfyUI:
+
 ```bash
 # Clone the repo
 cd /workspace
@@ -57,11 +58,15 @@ git clone https://github.com/ltdrdata/ComfyUI-Manager.git custom_nodes/ComfyUI-M
 cd custom_nodes/ComfyUI-Manager
 pip3 install -r requirements.txt
 ```
+
 2. Install the Serverless dependencies:
+
 ```bash
 pip3 install huggingface_hub runpod
 ```
+
 3. Download some checkpoints:
+
 ```bash
 cd /workspace/ComfyUI/models/checkpoints
 wget https://huggingface.co/runwayml/stable-diffusion-v1-5/resolve/main/v1-5-pruned.safetensors
@@ -69,19 +74,25 @@ wget https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0/resolve/mai
 wget https://huggingface.co/stabilityai/stable-diffusion-xl-refiner-1.0/resolve/main/sd_xl_refiner_1.0.safetensors
 wget -O deliberate_v2.safetensors https://huggingface.co/XpucT/Deliberate/resolve/main/Deliberate_v2.safetensors
 ```
+
 4. Download VAEs for SD 1.5 and SDXL:
+
 ```bash
 cd /workspace/ComfyUI/models/vae
 wget https://huggingface.co/stabilityai/sd-vae-ft-mse-original/resolve/main/vae-ft-mse-840000-ema-pruned.safetensors
 wget https://huggingface.co/madebyollin/sdxl-vae-fp16-fix/resolve/main/sdxl_vae.safetensors
 ```
+
 5. Download ControlNet models, for example `canny` for SD 1.5 as well as SDXL:
+
 ```bash
 cd /workspace/ComfyUI/models/controlnet
 wget https://huggingface.co/lllyasviel/ControlNet-v1-1/resolve/main/control_v11p_sd15_canny.pth
 wget https://huggingface.co/lllyasviel/sd_control_collection/resolve/main/diffusers_xl_canny_full.safetensors
 ```
+
 6. Create logs directory:
+
 ```bash
 mkdir -p /workspace/logs
 ```
