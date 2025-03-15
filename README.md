@@ -3,6 +3,31 @@
 This is the source code for a [RunPod](https://runpod.io?ref=2xxro4sy)
 Serverless worker that uses the [ComfyUI API](https://github.com/comfyanonymous/ComfyUI) for inference.
 
+## Issues and how to fix:
+
+# 1. In Runpod
+
+If can't run, run this:
+pip install einops psutil scipy torchsde
+pip install -r requirements.txt
+
+# 2. In local
+
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+
+We need to do 3 things
+
+1. Start local test server:
+   python rp_handler.py --rp_serve_api
+
+2. Start ComfyUI:
+   cd ~/Documents/AI/ComfyUI && python3 main.py
+
+3. Start the test
+   python txt2img.py
+
 ## Model
 
 The model(s) for inference will be loaded from a RunPod
