@@ -12,8 +12,8 @@ from schemas.input import INPUT_SCHEMA
 import base64
 
 
-BASE_URI = 'http://127.0.0.1:3000' # docker
-# BASE_URI = 'http://127.0.0.1:8188' # local
+IS_DOCKER = True
+BASE_URI = 'http://127.0.0.1:3000' if IS_DOCKER else 'http://127.0.0.1:8188'
 VOLUME_MOUNT_PATH = '/runpod-volume'
 TIMEOUT = 600
 
@@ -75,8 +75,8 @@ def get_txt2img_payload(workflow, payload):
 
 
 def get_workflow_payload(workflow_name, payload):
-    # with open(f'./workflows/{workflow_name}.json', 'r') as json_file: # local
-    with open(f'/workflows/{workflow_name}.json', 'r') as json_file: # docker
+    workflow_path = '/workflows' if IS_DOCKER else './workflows'
+    with open(f'{workflow_path}/{workflow_name}.json', 'r') as json_file:
         workflow = json.load(json_file)
 
     if workflow_name == 'txt2img':
@@ -188,8 +188,7 @@ def handler(event):
 
                 for image_filename in image_filenames:
                     filename = image_filename['filename']
-                    image_path = f'{VOLUME_MOUNT_PATH}/ComfyUI/output/{filename}' # docker
-                    # image_path = f'/Users/lamngo/Documents/AI/ComfyUI/output/{filename}' # local
+                    image_path = f'{VOLUME_MOUNT_PATH}/ComfyUI/output/{filename}' if IS_DOCKER else f'/Users/lamngo/Documents/AI/ComfyUI/output/{filename}'
 
                     with open(image_path, 'rb') as image_file:
                         images.append(base64.b64encode(image_file.read()).decode('utf-8'))

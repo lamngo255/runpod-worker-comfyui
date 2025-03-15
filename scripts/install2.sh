@@ -25,6 +25,7 @@ wget -O RealitiesEdgeXLSDXL_TURBOXLV2.safetensors https://huggingface.co/SEVUNX/
 wget https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0/resolve/main/sd_xl_base_1.0.safetensors
 
 # IP Adapter
+mkdir -p /workspace/ComfyUI/models/ipadapter
 cd /workspace/ComfyUI/models/ipadapter
 wget https://huggingface.co/h94/IP-Adapter/resolve/main/sdxl_models/ip-adapter_sdxl_vit-h.safetensors
 
