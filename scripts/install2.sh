@@ -16,43 +16,25 @@ pip3 install --no-cache-dir xformers==0.0.22
 echo "Installing RunPod Serverless dependencies"
 pip3 install huggingface_hub runpod
 
-echo "Downloading SD 1.5 base model"
+echo "Downloading models"
+
+# Checkpoints
 cd /workspace/ComfyUI/models/checkpoints
-wget https://huggingface.co/runwayml/stable-diffusion-v1-5/resolve/main/v1-5-pruned.safetensors
-
-echo "Downloading Deliberate v2 model"
-wget -O deliberate_v2.safetensors https://huggingface.co/XpucT/Deliberate/resolve/main/Deliberate_v2.safetensors
-
-echo "Downloading SDXL base model"
+wget -O depth_anything_vitl14.pth https://huggingface.co/spaces/LiheYoung/Depth-Anything/resolve/main/checkpoints/depth_anything_vitl14.pth
+wget -O RealitiesEdgeXLSDXL_TURBOXLV2.safetensors https://huggingface.co/SEVUNX/sdxl_model/resolve/main/download_5/RealitiesEdgeXLSDXL_TURBOXLV2.safetensors
 wget https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0/resolve/main/sd_xl_base_1.0.safetensors
 
-echo "Downloading SDXL Refiner"
-wget https://huggingface.co/stabilityai/stable-diffusion-xl-refiner-1.0/resolve/main/sd_xl_refiner_1.0.safetensors
+# IP Adapter
+cd /workspace/ComfyUI/models/ipadapter
+wget https://huggingface.co/h94/IP-Adapter/resolve/main/sdxl_models/ip-adapter_sdxl_vit-h.safetensors
 
-echo "Downloading SD 1.5 VAE"
-cd /workspace/ComfyUI/models/vae
-wget https://huggingface.co/stabilityai/sd-vae-ft-mse-original/resolve/main/vae-ft-mse-840000-ema-pruned.safetensors
+# CLIP Vision
+cd /workspace/ComfyUI/models/clip_vision
+wget https://huggingface.co/h94/IP-Adapter/resolve/main/models/image_encoder/model.safetensors
 
-echo "Downloading SDXL VAE"
-wget https://huggingface.co/madebyollin/sdxl-vae-fp16-fix/resolve/main/sdxl_vae.safetensors
-
-echo "Downloading SD 1.5 ControlNet models"
+# ControlNet
 cd /workspace/ComfyUI/models/controlnet
-wget https://huggingface.co/lllyasviel/ControlNet-v1-1/resolve/main/control_v11p_sd15_openpose.pth
-wget https://huggingface.co/lllyasviel/ControlNet-v1-1/resolve/main/control_v11p_sd15_canny.pth
-wget https://huggingface.co/lllyasviel/ControlNet-v1-1/resolve/main/control_v11f1p_sd15_depth.pth
-wget https://huggingface.co/lllyasviel/ControlNet-v1-1/resolve/main/control_v11p_sd15_inpaint.pth
-wget https://huggingface.co/lllyasviel/ControlNet-v1-1/resolve/main/control_v11p_sd15_lineart.pth
-wget https://huggingface.co/ioclab/ioc-controlnet/resolve/main/models/control_v1p_sd15_brightness.safetensors
-wget https://huggingface.co/lllyasviel/ControlNet-v1-1/resolve/main/control_v11f1e_sd15_tile.pth
-
-echo "Downloading SDXL ControlNet models"
-wget https://huggingface.co/lllyasviel/sd_control_collection/resolve/main/diffusers_xl_canny_full.safetensors
-
-echo "Downloading Upscalers"
-cd /workspace/ComfyUI/models/upscale_models
-wget https://huggingface.co/ashleykleynhans/upscalers/resolve/main/4x-UltraSharp.pth
-wget https://huggingface.co/ashleykleynhans/upscalers/resolve/main/lollypop.pth
+wget -O diffusion_pytorch_model.safetensors https://huggingface.co/xinsir/controlnet-union-sdxl-1.0/resolve/4f29d5315034aaab86c11dc8c91b88bf188674ca/diffusion_pytorch_model.safetensors
 
 echo "Creating log directory"
 mkdir -p /workspace/logs
