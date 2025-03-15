@@ -13,6 +13,7 @@ export LD_PRELOAD="${TCMALLOC}"
 export PYTHONUNBUFFERED=true
 export HF_HOME="/workspace"
 cd /workspace/ComfyUI
+echo "Run ComfyUI server"
 python main.py --port 3000 > /workspace/logs/comfyui.log 2>&1 &
 deactivate
 
